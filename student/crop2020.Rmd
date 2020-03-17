@@ -1,0 +1,75 @@
+---
+title: "Crop data"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Packages
+
+```{r packages}
+require(data.table)
+require(sf)
+require(mapview)
+```
+
+## Harvest data
+
+```{r data-harvest}
+# read list of files
+fl_vec = list.files('data/nrw', pattern = 'csv', full.names = TRUE)
+l = list()
+for (i in seq_along(fl_vec)) {
+  fl = fl_vec[i]
+  dat = fread(fl, skip = 7, header = TRUE, encoding = 'Latin-1', stringsAsFactors = FALSE)
+  dat = dat[-1, ]
+  setnames(dat, 1:2, c('rs', 'gen'))
+  
+  l[[i]] = dat
+  names(l)[i] = gsub('ernte|.csv', '', basename(fl))
+}
+# bind list of data.table to one data.table
+dt = rbindlist(l, fill = TRUE, idcol = 'year')
+# TODO remove special symbols and convert column types to numeric
+# TODO bring data into long format (year, rs, gen as identifier variables)
+```
+
+```{r data-spatial-regions}
+kreis = st_read(file.path('data', 'germany_kreis.shp'), stringsAsFactors = FALSE)
+setnames(kreis, tolower(names(kreis)))
+kreis$rs = as.numeric(kreis$rs)
+kreis2 = kreis[ , names(kreis) %in% c('rs', 'rs_alt', 'geom', 'shape_leng', 'shape_area') ]
+mapview(kreis2) # to have an interactive look at the geo data
+# TODO refine to NRW only
+```
+
+```{r merge}
+# TODO merge geo and cropt data
+```
+
+```{r data-spatial-pesticides}
+nrw2 = readRDS(file.path('data/nrw', 'nrw_sites.rds')) # spatial sites data
+nrw_sam = readRDS(file.path('data/nrw', 'nrw_samples.rds')) # pesticide samples
+```
+
+## Tasks
+
+- Part1:
+  - Clean crop data
+  - Merge with spatial data
+  - Aggregate crop data
+  - Select 5-10 regions (i.e. Kreis) with the most agriculture
+  - Visualize regions with intensive agriculture
+
+- Part2:
+  - Intersect with pesticide sampling sites
+  - Look if sites with high concentrations intersect well with regions (i.e. Kreis) with high agriculture
+  - Visualise this
+
+- Document this in R-Markdown
+- Presentation?
+
+
+
+
+
