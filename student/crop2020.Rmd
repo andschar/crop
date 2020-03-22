@@ -14,6 +14,14 @@ require(mapview)
 ```
 
 ## Harvest data
+(28) A list named fl_vec of every name of the datatables in the data/nrw directory was created 
+(29) A new list named l was created
+(30-32) Every table from the data named as the strings in the list fl_vec was implemented in a dataframe named dat
+(33) The first row which contains the sum of all crops in NRW (we just want the single districts) was dropped
+(34) The names for the first two columns representing the district number and the district name were set to 'rs' and 'gen'
+(36) The list l was filled with the rows, each containing a dataframe from dat for every year
+(37-40) the names of the rows in l are reduced from the data name to only the yearnumber and are reffered to as year
+
 
 ```{r data-harvest}
 # read list of files
@@ -31,6 +39,8 @@ for (i in seq_along(fl_vec)) {
 # bind list of data.table to one data.table
 dt = rbindlist(l, fill = TRUE, idcol = 'year')
 # TODO remove special symbols and convert column types to numeric
+dtc = as.numeric(dt[,4:41])
+class(dt)
 # TODO bring data into long format (year, rs, gen as identifier variables)
 ```
 
