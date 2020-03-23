@@ -38,9 +38,23 @@ for (i in seq_along(fl_vec)) {
 }
 # bind list of data.table to one data.table
 dt = rbindlist(l, fill = TRUE, idcol = 'year')
+
 # TODO remove special symbols and convert column types to numeric
+
+# 1. Try
 dtc=data.frame(dt[,-1:-3]) #dropped first 3 columns to create new dataframe called dtc
-dtc[] <- lapply(dt, function(x) as.numeric(gsub("[.-x]", "", x)) ) #applies numeric to all rows in dtc and deletes all values of '.' 'x' '-' --> replaces everything with NA somehow
+for (i in seq_along(dtc)){
+for (j in 1:671){
+  dtc$i[j] <- sapply(dt$i[j], function(x) as.numeric(gsub("[.-x]", "", x)) ) 
+  }
+} #returns no changes in class and content
+#if it works, then merge dtc with the first 3 rows of dt again
+
+#2. Try
+dtc2 = as.data.frame(lapply(dt[,4:41], function(x) as.numeric(gsub("[.-x]","",x))))
+#returns only NA, even in columns 1 to 4
+
+#3. Try
 
 
 # TODO bring data into long format (year, rs, gen as identifier variables)
