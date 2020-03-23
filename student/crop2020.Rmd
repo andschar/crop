@@ -11,6 +11,8 @@ editor_options:
 require(data.table)
 require(sf)
 require(mapview)
+require(stringr)
+require(dplyr)
 ```
 
 ## Harvest data
@@ -20,8 +22,8 @@ require(mapview)
 (33) The first row  was dropped, but why?
 (34) The names for the first two columns representing the district number and the district name were set to 'rs' and 'gen'
 (36) The list l was filled with the rows, each containing a dataframe from dat for every year
-(37) the names of the rows in l are reduced from the data name to only the yearnumber and are reffered to as year
-(40) rbindlist stacked all the data.frames of the list l to a single data.frame 
+(37) the names of the rows in l are reduced from the data name to only the yearnumber
+(40) rbindlist stacked all the data.frames of the list l to a single data.frame and labeled the id column to year
 
 ```{r data-harvest}
 # read list of files
@@ -55,7 +57,7 @@ dtc2 = as.data.frame(lapply(dt[,4:41], function(x) as.numeric(gsub("[.-x]","",x)
 #returns only NA, even in columns 1 to 4
 
 #3. Try
-
+dtc3 = as.data.frame(gsub(',','.',dt[,4:41]))
 
 # TODO bring data into long format (year, rs, gen as identifier variables)
 ```
