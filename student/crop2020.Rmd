@@ -13,6 +13,7 @@ require(sf)
 require(mapview)
 require(stringr)
 require(dplyr)
+require(data.table)
 ```
 
 ## Harvest data
@@ -51,19 +52,18 @@ for(i in 4:41){
   dtc[,i] = as.numeric(dtc[,i])
 }
 # TODO bring data into long format (year, rs, gen as identifier variables)
-
-
-
+dtc=setDT(dtc)
+str(dtc)
+dtc_long = melt(dtc, id.vars = c("year","rs","gen"))
+dtc_long = rename(dtc_long, crop = variable)
+dtc_long = rename(dtc_long, dt.ha = value)
 ```
 
-(67) Shapefiles der Kreise Deutschlands werden eingelesen.
-(68) Namen der Spalten werden alle nun klein geschrieben
-(69) rs der Kreise soll als numeric typisiert sein --> merge mit rs aus dtc
-(70) kreis2 ist Tabelle aus Kopie der Spalten rs, rs_alt, ... von kreis
-(71) zeigt die Karte an
-
-
-
+(1) Shapefiles der Kreise Deutschlands werden eingelesen.
+(2) Namen der Spalten werden alle nun klein geschrieben
+(3) rs der Kreise soll als numeric typisiert sein --> merge mit rs aus dtc
+(4) kreis2 ist Tabelle aus Kopie der Spalten rs, rs_alt, ... von kreis
+(5) zeigt die Karte an
 
 ```{r data-spatial-regions}
 kreis = st_read(file.path('data', 'germany_kreis.shp'), stringsAsFactors = FALSE)
@@ -72,6 +72,19 @@ kreis$rs = as.numeric(kreis$rs)
 kreis2 = kreis[ , names(kreis) %in% c('rs', 'rs_alt', 'geom', 'shape_leng', 'shape_area') ]
 mapview(kreis2) # to have an interactive look at the geo data
 # TODO refine to NRW only
+#1. Try Approach to create rows in new dataframe with rs-condition(maybe wrong)
+
+
+
+
+kreis3 = as.data.frame(kreis2[0,])
+for (i in 1:402){
+  if (kreis2$rs[i]>05000 & kreis2$rs[i]<06000){
+    kreis3[]= list(kreis2[i,])
+  }
+}
+# maybe with rbind
+#2nd Try Approach to delete rows with certain rs condition
 ```
 
 ```{r merge}
