@@ -73,18 +73,16 @@ kreis2 = kreis[ , names(kreis) %in% c('rs', 'rs_alt', 'geom', 'shape_leng', 'sha
 mapview(kreis2) # to have an interactive look at the geo data
 # TODO refine to NRW only
 #1. Try Approach to create rows in new dataframe with rs-condition(maybe wrong)
-
-
-
-
-kreis3 = as.data.frame(kreis2[0,])
+kreis3 = kreis2[0,]
+# kreis3 = as.data.frame[0,]
 for (i in 1:402){
-  if (kreis2$rs[i]>05000 & kreis2$rs[i]<06000){
-    kreis3[]= list(kreis2[i,])
+  if (kreis2$rs[i]>5000 & kreis2$rs[i]<6000){
+  # add_row(kreis3)
+    rbind(kreis3)
+  kreis3[nrow(kreis3)+1,] = kreis2[i,]
   }
 }
-# maybe with rbind
-#2nd Try Approach to delete rows with certain rs condition
+mapview(kreis3) # test in mapview
 ```
 
 ```{r merge}
