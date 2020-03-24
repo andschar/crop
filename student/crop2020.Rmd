@@ -52,7 +52,18 @@ for(i in 4:41){
 }
 # TODO bring data into long format (year, rs, gen as identifier variables)
 
+
+
 ```
+
+(67) Shapefiles der Kreise Deutschlands werden eingelesen.
+(68) Namen der Spalten werden alle nun klein geschrieben
+(69) rs der Kreise soll als numeric typisiert sein --> merge mit rs aus dtc
+(70) kreis2 ist Tabelle aus Kopie der Spalten rs, rs_alt, ... von kreis
+(71) zeigt die Karte an
+
+
+
 
 ```{r data-spatial-regions}
 kreis = st_read(file.path('data', 'germany_kreis.shp'), stringsAsFactors = FALSE)
