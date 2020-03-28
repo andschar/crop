@@ -72,7 +72,6 @@ kreis$rs = as.numeric(kreis$rs)
 kreis2 = kreis[ , names(kreis) %in% c('rs', 'rs_alt', 'geom', 'shape_leng', 'shape_area') ]
 mapview(kreis2) # to have an interactive look at the geo data
 # TODO refine to NRW only
-#1. Try Approach to create rows in new dataframe with rs-condition(maybe wrong)
 kreis3 = kreis2[0,]
 # kreis3 = as.data.frame[0,]
 for (i in 1:402){
@@ -83,10 +82,14 @@ for (i in 1:402){
   }
 }
 mapview(kreis3) # test in mapview
+
 ```
 
 ```{r merge}
 # TODO merge geo and cropt data
+fin = merge(kreis3, dtc_long)
+mapview(fin) # test
+# TODO crop again in wide format maybe
 ```
 
 ```{r data-spatial-pesticides}
