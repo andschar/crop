@@ -82,14 +82,21 @@ for (i in 1:402){
   }
 }
 mapview(kreis3) # test in mapview
-
 ```
 
 ```{r merge}
-# TODO merge geo and cropt data
+# TODO merge geo and crop data
 fin = merge(kreis3, dtc_long)
 mapview(fin) # test
-# TODO crop again in wide format maybe
+str(fin) #test structure
+# aggreagate crop data to single districts
+for (i in 5000:6000){
+  if (fin$rs=i){
+    cropof = aggregate(dt.ha ~ crop, fin$rs, mean)
+    assign(paste0(i),cropof)
+  }
+  else{}
+}
 ```
 
 ```{r data-spatial-pesticides}
