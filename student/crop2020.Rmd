@@ -14,6 +14,7 @@ require(mapview)
 require(stringr)
 require(dplyr)
 require(data.table)
+require(ggplot2)
 ```
 
 ## Harvest data
@@ -52,11 +53,10 @@ for(i in 4:41){
   dtc[,i] = as.numeric(dtc[,i])
 }
 # TODO bring data into long format (year, rs, gen as identifier variables)
+crop_names = colnames(dtc[,4:41])
 dtc=setDT(dtc)
 str(dtc)
-dtc_long = melt(dtc, id.vars = c("year","rs","gen"))
-dtc_long = rename(dtc_long, crop = variable)
-dtc_long = rename(dtc_long, dt.ha = value)
+dtc_long = melt(dtc, id.vars = c("year","rs","gen"), measure.vars = crop_names, variable.name = 'crop', value.name = 'dt.ha' )
 ```
 
 (1) Shapefiles der Kreise Deutschlands werden eingelesen.
