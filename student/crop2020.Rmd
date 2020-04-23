@@ -106,11 +106,10 @@ str(fin) #test structure
 mn_crop = fin %>% 
   group_by(crop) %>%
   summarise(mean(dt.ha))
-  
+
+# TODO Durchschnittsertrag je Feldfrucht je Kreis 
 mn_crop_kreis = fin %>%
-  group_by(rs) %>%
-  group_by(crop) %>%
-  summarise(mean(dt.ha))
+ 
 ```
 
 ```{r data-spatial-pesticides}
