@@ -107,9 +107,16 @@ mn_crop = fin %>%
   group_by(crop) %>%
   summarise(mean(dt.ha))
 
+# Durchschnittsertrag je Kreis
+mn_kreis = fin %>%
+  group_by(gen) %>%
+  summarise(mean(dt.ha))
+
 # TODO Durchschnittsertrag je Feldfrucht je Kreis 
-mn_crop_kreis = fin %>%
- 
+mn_cropkreis = fin %>%
+  group_by(rs) %>%
+  
+
 ```
 
 ```{r data-spatial-pesticides}
