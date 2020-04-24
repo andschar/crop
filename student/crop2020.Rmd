@@ -15,6 +15,7 @@ require(stringr)
 require(dplyr)
 require(data.table)
 require(ggplot2)
+require(leaflet)
 ```
 
 ## Harvest data
@@ -105,18 +106,32 @@ str(fin) #test structure
 # Durchschnittsertrag je Feldfrucht in ganz NRW
 mn_crop = fin %>% 
   group_by(crop) %>%
-  summarise(mean(dt.ha))
+  summarise(mn_dt=mean(dt.ha))
+
+ggplot(mn_crop, aes(crop,mn_dt)) + 
+  geom_bar() 
+  
+
 
 # Durchschnittsertrag je Kreis
 mn_kreis = fin %>%
-  group_by(gen) %>%
-  summarise(mean(dt.ha))
+  group_by(rs) %>%
+  summarise(mn_dt = mean(dt.ha), do_union = TRUE)
+
+plot(mn_kreis["mn_dt"])
+
+# TODO Durchschnittsertrag je Kreis pro Fläche
+mn_kreispa = fin %>%
+  group_by(rs) %>%
+  summarise(mn_dt.ha.a = mean(dt.ha)^2/mean(shape_area), do_union = TRUE)
+
+plot(mn_kreispa["mn_dt.ha.a"])
 
 # TODO Durchschnittsertrag je Feldfrucht je Kreis 
 mn_cropkreis = fin %>%
   group_by(rs) %>%
   
-
+# TODO Durchschnittsertrag je wichtige Feldfrucht pro Fläche
 ```
 
 ```{r data-spatial-pesticides}
