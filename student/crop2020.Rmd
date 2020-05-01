@@ -89,26 +89,35 @@ mapview(kreis3) # test in mapview
 fin = merge(kreis3, dtc_long)
 str(fin) #test structure
 
-# https://r-spatial.github.io/sf/reference/tidyverse.html
-#Syntax Beispiel 
-# Ersten zwei Zeichen von RS sind das Bundesland
-#   kreis = kreis %>% 
-#     mutate(rs2 = substr(RS,1,2)) # adds new variable and preserves existing ones
-#   # Fläche pro Bundesland
-#   kreis %>% 
-#     group_by(rs2) %>% 
-#     mutate(mn = mean(SHAPE_AREA)) # adds new variable and preserves existing ones
-#   kreis %>% 
-#     group_by(rs2) %>% 
-#     summarise(mn = mean(SHAPE_AREA)) # summarises variables
-
 # Durchschnittsertrag je Feldfrucht in ganz NRW
 mn_crop = fin %>% 
   group_by(crop) %>%
   summarise(mn_dt=mean(dt.ha))
 
+# shorten crop names and plot mn_crop
+cropnms = gsub('[.]', ' ', crop_names)
+cropnms[1] = 'Getreide+'
+cropnms[2] = 'Getreide-'
+cropnms[7] = 'Hartweizen'
+cropnms[8] = 'Roggen+'
+cropnms[11] = 'Futtergetreide'
+cropnms[10] = 'Wintergetreide'
+cropnms[16] = 'Sommergetreide'
+cropnms[18] = 'Körnermais+'
+cropnms[21] = 'Spätkartoffeln'
+cropnms[24] = 'Leguminosen'
+cropnms[25] = 'Erbsen'
+cropnms[28] = 'Sommerraps'
+cropnms[31] = 'Getreideganz'
+cropnms[33] = 'Weiden'
+cropnms[34] = 'Feldgras'
+cropnms[35] = 'Klee'
+cropnms[37] = 'Silomais'
+
 ggplot(mn_crop, aes(x=crop,y=mn_dt)) + 
-  geom_bar(stat = "identity") 
+  geom_bar(stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, size = 9, vjust = 0))+
+  scale_x_discrete(labels=cropnms)
   
 
 # Durchschnittsertrag je Kreis
