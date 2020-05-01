@@ -107,10 +107,9 @@ mn_crop = fin %>%
   group_by(crop) %>%
   summarise(mn_dt=mean(dt.ha))
 
-ggplot(mn_crop, aes(crop,mn_dt)) + 
-  geom_bar() 
+ggplot(mn_crop, aes(x=crop,y=mn_dt)) + 
+  geom_bar(stat = "identity") 
   
-
 
 # Durchschnittsertrag je Kreis
 mn_kreis = fin %>%
@@ -119,29 +118,30 @@ mn_kreis = fin %>%
 
 mapview(mn_kreis)
 
-# TODO Durchschnittsertrag je Jahr
+# Durchschnittsertrag je Jahr
 mn_jahr = fin %>%
   group_by(year) %>%
   summarise(mean(dt.ha))
 
-# TODO Durchschnittsertrag je Kreis pro Fläche
+# Durchschnittsertrag je Jahr je Feldfrucht
+
+mn_cropjahr = fin %>%
+  group_by(year, crop) %>%
+  summarise(mean(dt.ha))
+
+# TODO Durchschnittsertrag je Kreis pro Fläche mit anständiger Formel
 mn_kreispa = fin %>%
   group_by(gen) %>%
   summarise(mn_dt.ha.a = mean(dt.ha)^2/mean(shape_area))
 
 mapview(mn_kreispa)
 
-# TODO Durchschnittsertrag je Feldfrucht je Kreis 
+# Durchschnittsertrag je Feldfrucht je Kreis 
 gennames = unique(fin$gen)
 
-for (i in 1:38) {
-  mn_cropkreis = fin %>%
-    filter(gen == gennames[i]) %>%
-    group_by(crop) %>%
-    mutate(mndt = mean(dt.ha))
-  paste0(mn_cropkreis, i)
-}
-
+mn_cropkreis = fin %>%
+  group_by(crop, gen) %>%
+  summarise(mean(dt.ha))
   
 # TODO Durchschnittsertrag je wichtige Feldfrucht pro Fläche
 ```
