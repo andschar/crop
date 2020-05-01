@@ -13,7 +13,6 @@ require(sf)
 require(mapview)
 require(stringr)
 require(dplyr)
-require(data.table)
 require(ggplot2)
 require(leaflet)
 ```
@@ -115,21 +114,34 @@ ggplot(mn_crop, aes(crop,mn_dt)) +
 
 # Durchschnittsertrag je Kreis
 mn_kreis = fin %>%
-  group_by(rs) %>%
-  summarise(mn_dt = mean(dt.ha), do_union = TRUE)
+  group_by(gen) %>%
+  summarise(mean(dt.ha))
 
-plot(mn_kreis["mn_dt"])
+mapview(mn_kreis)
+
+# TODO Durchschnittsertrag je Jahr
+mn_jahr = fin %>%
+  group_by(year) %>%
+  summarise(mean(dt.ha))
 
 # TODO Durchschnittsertrag je Kreis pro Fläche
 mn_kreispa = fin %>%
-  group_by(rs) %>%
-  summarise(mn_dt.ha.a = mean(dt.ha)^2/mean(shape_area), do_union = TRUE)
+  group_by(gen) %>%
+  summarise(mn_dt.ha.a = mean(dt.ha)^2/mean(shape_area))
 
-plot(mn_kreispa["mn_dt.ha.a"])
+mapview(mn_kreispa)
 
 # TODO Durchschnittsertrag je Feldfrucht je Kreis 
-mn_cropkreis = fin %>%
-  group_by(rs) %>%
+gennames = unique(fin$gen)
+
+for (i in 1:38) {
+  mn_cropkreis = fin %>%
+    filter(gen == gennames[i]) %>%
+    group_by(crop) %>%
+    mutate(mndt = mean(dt.ha))
+  paste0(mn_cropkreis, i)
+}
+
   
 # TODO Durchschnittsertrag je wichtige Feldfrucht pro Fläche
 ```
@@ -151,7 +163,7 @@ nrw_sam = readRDS(file.path('data/nrw', 'nrw_samples.rds')) # pesticide samples
 - Part2:
   - Intersect with pesticide sampling sites
   - Look if sites with high concentrations intersect well with regions (i.e. Kreis) with high agriculture
-  - Visualise this
+  - Visualize this
 
 - Document this in R-Markdown
 - Presentation?
