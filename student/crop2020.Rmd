@@ -92,7 +92,7 @@ str(fin) #test structure
 # Durchschnittsertrag je Feldfrucht in ganz NRW
 mn_crop = fin %>% 
   group_by(crop) %>%
-  summarise(mn_dt=mean(dt.ha))
+  summarise(mn_dt = mean(dt.ha))
 
 # shorten crop names and plot mn_crop
 cropnms = gsub('[.]', ' ', crop_names)
@@ -141,23 +141,29 @@ mn_cropjahr = fin %>%
 # TODO Durchschnittsertrag je Kreis pro Fläche mit anständiger Formel
 mn_kreispa = fin %>%
   group_by(gen) %>%
-  summarise(mn_dt.ha.a = mean(dt.ha)^2/mean(shape_area))
+  summarise(mn_dt = mean(dt.ha)^8/mean(shape_area))
 
-mapview(mn_kreispa)
+plot(mn_kreispa)
 
 # Durchschnittsertrag je Feldfrucht je Kreis 
-gennames = unique(fin$gen)
-
 mn_cropkreis = fin %>%
   group_by(crop, gen) %>%
   summarise(mean(dt.ha))
   
 # TODO Durchschnittsertrag je wichtige Feldfrucht pro Fläche
+
 ```
 
 ```{r data-spatial-pesticides}
 nrw2 = readRDS(file.path('data/nrw', 'nrw_sites.rds')) # spatial sites data
 nrw_sam = readRDS(file.path('data/nrw', 'nrw_samples.rds')) # pesticide samples
+
+site_id = list()
+
+nrw_sam = rbindlist(site_id, fill = TRUE, idcol = 'site_id')
+
+
+mapview(nrw_sam)
 ```
 
 ## Tasks
