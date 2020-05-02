@@ -158,9 +158,9 @@ mn_cropkreis = fin %>%
 nrw2 = readRDS(file.path('data/nrw', 'nrw_sites.rds')) # spatial sites data
 nrw_sam = readRDS(file.path('data/nrw', 'nrw_samples.rds')) # pesticide samples
 
-site_id = list()
-
-nrw_sam = rbindlist(site_id, fill = TRUE, idcol = 'site_id')
+site_id = nrw_sam$sample_id
+site_id = gsub('_....-..-..','',site_id)
+cbind(nrw_sam,site_id)
 
 
 mapview(nrw_sam)
