@@ -158,12 +158,16 @@ mn_cropkreis = fin %>%
 nrw2 = readRDS(file.path('data/nrw', 'nrw_sites.rds')) # spatial sites data
 nrw_sam = readRDS(file.path('data/nrw', 'nrw_samples.rds')) # pesticide samples
 
-site_id = nrw_sam$sample_id
-site_id = gsub('_....-..-..','',site_id)
-cbind(nrw_sam,site_id)
+nrw_sam$site_id = gsub('_....-..-..','',nrw_sam$sample_id)
 
+pest = merge(nrw2, nrw_sam)
 
-mapview(nrw_sam)
+#Summe der Messwerte pro Site
+sum_pest = pest %>%
+  group_by(site_id) %>%
+  summarise(sum_value = sum(value, na.rm = TRUE))
+
+mapview(sum_pest)
 ```
 
 ## Tasks
