@@ -12,6 +12,7 @@ require(data.table)
 require(sf)
 require(mapview)
 require(stringr)
+require(plyr)
 require(dplyr)
 require(ggplot2)
 require(leaflet)
@@ -85,14 +86,8 @@ mapview(kreis3) # test in mapview
 ```
 
 ```{r merge}
-# TODO merge geo and crop data
+# merge geo and crop data
 fin = merge(kreis3, dtc_long)
-str(fin) #test structure
-
-# Durchschnittsertrag je Feldfrucht in ganz NRW
-mn_crop = fin %>% 
-  group_by(crop) %>%
-  summarise(mn_dt = mean(dt.ha))
 
 # shorten crop names and plot mn_crop
 cropnms = gsub('[.]', ' ', crop_names)
@@ -114,11 +109,40 @@ cropnms[34] = 'Feldgras'
 cropnms[35] = 'Klee'
 cropnms[37] = 'Silomais'
 
+# rename crops
+
+fin$crop = mapvalues(fin$crop, from = crop_names, to = cropnms)
+
+#crop categories
+Getreide = 'Getreide+' + 'Getreide-' +  'Brotgetreidearten' + 'Wintergetreide' + 'Futtergetreide' +  'Sommergetreide' + 'Titricale'
+Weizen = Winterweizen, Sommerweizen, Rauhfutter Getreideganz, Hartweizen, Weizen
+Roggen = Roggen+, Roggen
+Gerste = Gerste, Wintergerste, sommergerste
+Hafer = Hafer
+Mais = Körnermais, Silomais
+Kartoffeln = Frühkartoffeln, Kartoffeln, Spätkartoffeln
+Rüben = Zuckerrüben, Runkelrüben
+RapsSonne = Winterraps, Sommerraps, Sonnenblumen
+Leguminosen = Leguminosen, Erbsen, Ackerbohnen, Klee, Luzerne, Süßlupinen
+Gras = Wiesen, Weiden, Feldgras
+
+# TODO reduce crop to categories
+fin2 = fin %>%
+  group_by(gen, year, rs, shape_area) %>%
+  summarise()
+
+
+  
+
+# Durchschnittsertrag je Feldfrucht in ganz NRW
+mn_crop = fin %>% 
+  group_by(crop) %>%
+  summarise(mn_dt = mean(dt.ha))
+
 ggplot(mn_crop, aes(x=crop,y=mn_dt)) + 
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 90, size = 9, vjust = 0))+
   scale_x_discrete(labels=cropnms)
-  
 
 # Durchschnittsertrag je Kreis
 mn_kreis = fin %>%
@@ -141,7 +165,7 @@ mn_cropjahr = fin %>%
 # TODO Durchschnittsertrag je Kreis pro Fläche mit anständiger Formel
 mn_kreispa = fin %>%
   group_by(gen) %>%
-  summarise(mn_dt = mean(dt.ha)^8/mean(shape_area))
+  summarise(mn_dt = mean(dt.ha)^8/mean(shape_area)) #!!!
 
 plot(mn_kreispa)
 
@@ -151,6 +175,8 @@ mn_cropkreis = fin %>%
   summarise(mean(dt.ha))
   
 # TODO Durchschnittsertrag je wichtige Feldfrucht pro Fläche
+
+#TODO Visualisierung
 
 ```
 
@@ -168,6 +194,16 @@ sum_pest = pest %>%
   summarise(sum_value = sum(value, na.rm = TRUE))
 
 mapview(sum_pest)
+
+#TODO summe der Messwerte pro Site pro PSM-Typ
+
+
+#TODO Karte der Pestizide mit intensiver LW-Fläche vergleichen
+
+#TODO Visualisierung
+
+#TODO Intersection + Visualisierung
+
 ```
 
 ## Tasks
@@ -187,7 +223,4 @@ mapview(sum_pest)
 - Document this in R-Markdown
 - Presentation?
 
-
-hallo 
-Hallo Mareike
 
