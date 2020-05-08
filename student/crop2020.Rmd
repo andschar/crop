@@ -132,8 +132,6 @@ fin2 = fin %>%
   summarise()
 
 
-  
-
 # Durchschnittsertrag je Feldfrucht in ganz NRW
 mn_crop = fin %>% 
   group_by(crop) %>%
@@ -175,6 +173,8 @@ mn_cropkreis = fin %>%
   summarise(mean(dt.ha))
   
 # TODO Durchschnittsertrag je wichtige Feldfrucht pro Fläche
+
+# TODO Auswahl der Kategorien und Berechnung eines Index
 
 #TODO Visualisierung
 
