@@ -63,13 +63,31 @@ nrw_sam = readRDS(file.path('data/nrw', 'nrw_samples.rds')) # pesticide samples
 
 - Part2:
   - Intersect with pesticide sampling sites
-  - Look if sites with high concentrations intersect well with regions (i.e. Kreis) with high agriculture
-  - Visualise this
+  
+- Part3: Research question:
+  - Do sites with high pesticide concentrations intersect well with regions (i.e. Kreis) with high agricultural intensity?
+    - Visualization
+  - Does agriculture intensity explain pesticide occurrence?
+    - Regression models
 
 - Document this in R-Markdown
+
 - Presentation?
 
+```{r}
+kreis2 = st_transform(kreis, st_crs(nrw2))
+st_crs(kreis2)
+ggplot() +
+  geom_sf(data = kreis2) +
+  geom_sf(data = nrw2)
+st_crs(nrw2)
+mapview(list(kreis2, nrw2))
 
+
+
+
+
+```
 
 
 
